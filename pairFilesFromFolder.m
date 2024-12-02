@@ -1,55 +1,58 @@
 function [pairs, commonX, diffY, commonZ, NbPaires] = pairFilesFromFolder(directory, Y_range, Z_range)
-    % directory : Dossier contenant les fichiers à analyser
-    % Y_range : Plage de valeurs de Y (ex: [1500, 2000])
-    % Z_range : Plage de valeurs de Z (ex: [90, 480])
+    % pairFilesFromFolder : Identifie des paires de fichiers correspondant à certaines contraintes.
+    %
+    % Syntaxe :
+    %   [pairs, commonX, diffY, commonZ, NbPaires] = pairFilesFromFolder(directory, Y_range, Z_range)
+    %
+    % Entrées :
+    %   - directory : Dossier contenant les fichiers à analyser.
+    %   - Y_range   : Plage de valeurs pour le paramètre Y (ex. [1500, 2000]).
+    %   - Z_range   : Plage de valeurs pour le paramètre Z (ex. [90, 480]).
+    %
+    % Sorties :
+    %   - pairs     : Cellule contenant les paires de fichiers identifiées.
+    %   - commonX   : Cellule avec les valeurs communes de X pour chaque paire.
+    %   - diffY     : Cellule contenant les valeurs différentes de Y pour chaque paire.
+    %   - commonZ   : Cellule avec les valeurs communes de Z pour chaque paire.
+    %   - NbPaires  : Nombre total de paires trouvées.
 
-    % Récupérer tous les fichiers dans le dossier
-    files = dir(fullfile(directory, '*.S2P')); % Récupérer les fichiers .S2P
-    filesNames = {files.name}; % Liste des noms de fichiers
+    % Liste des fichiers .S2P dans le dossier
+    files = dir(fullfile(directory, '*.S2P'));
+    filesNames = {files.name}; % Récupération des noms de fichiers
 
-    % Initialisation des structures pour les paires
+    % Initialisation des variables de sortie
     pairs = {};
     commonX = {};
     diffY = {};
     commonZ = {};
     NbPaires = 0;
 
-    % Pour chaque fichier, extraire X, Y, Z et organiser les fichiers
+    % Parcours des fichiers pour identifier les paires
     for i = 1:length(filesNames)
         fileName = filesNames{i};
-        
-        % Extraire les informations X, Y, Z à partir du nom de fichier
+
+        % Extraction des paramètres X, Y et Z
         [X, Y, Z] = extractFileParams(fileName);
-        
-        % Vérifier que Y et Z sont dans les plages spécifiées
+
+        % Vérification si Y et Z sont dans les plages spécifiées
         if isempty(Y) || isempty(Z) || ~ismember(Y, Y_range) || ~ismember(Z, Z_range)
-            continue; % Si le fichier ne correspond pas à la plage, on le saute
+            continue; % Si le fichier est hors plage, on passe au suivant
         end
-        
-        % Chercher un fichier correspondant (même X et Z, mais Y différent)
+
+        % Recherche de fichiers compatibles pour former une paire
         for j = i+1:length(filesNames)
             compareFileName = filesNames{j};
             [compareX, compareY, compareZ] = extractFileParams(compareFileName);
-            
-            % Si le fichier a les mêmes X et Z, mais Y différent, ils sont une paire
+
+            % Vérification des critères pour former une paire
             if strcmp(X, compareX) && Z == compareZ && Y ~= compareY
-                pairs{end+1} = {fileName, compareFileName}; % Ajouter la paire à la liste
-                commonX{end+1} = X;
-                diffY{end+1} = [Y, compareY];
-                commonZ{end+1} = Z;
-                NbPaires = NbPaires + 1;
-                break; % On arrête la recherche de pair pour ce fichier
+                pairs{end+1} = {fileName, compareFileName}; % Ajout de la paire
+                commonX{end+1} = X; % Stockage de X commun
+                diffY{end+1} = [Y, compareY]; % Stockage des Y différents
+                commonZ{end+1} = Z; % Stockage de Z commun
+                NbPaires = NbPaires + 1; % Incrémentation du compteur
+                break; % Arrêt de la recherche pour ce fichier
             end
         end
     end
-    
-    % Affichage des résultats
-    % if ~isempty(pairs)
-    %     disp('Paires de fichiers trouvées :');
-    %     for k = 1:length(pairs)
-    %         disp(['Paire ', num2str(k), ': ', pairs{k}{1}, ' et ', pairs{k}{2}]);
-    %     end
-    % else
-    %     disp('Aucune paire de fichiers trouvée.');
-    % end
 end
