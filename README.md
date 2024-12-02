@@ -27,7 +27,7 @@ Extrait les informations d'un fichier nommé `4_Sij_Deembed_1500_L1500um_350_P35
 disp(X); % 'Deembed'
 disp(Y); % 1500
 disp(Z); % 350
-
+```
 ---
 
 ## Auteur
