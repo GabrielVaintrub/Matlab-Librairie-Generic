@@ -1,4 +1,4 @@
-function [pairs, commonX, diffY, commonZ, NbPaires] = pairFilesFromFolder(directory, Y_range, varargin)
+function [pairs, commonX, diffY, commonZ, NbPaires] = pairFilesFromFolderBis(directory, Y_range, varargin)
     % pairFilesFromFolder : Identifie des paires de fichiers selon des contraintes.
     %
     % Syntaxe :
@@ -41,7 +41,7 @@ function [pairs, commonX, diffY, commonZ, NbPaires] = pairFilesFromFolder(direct
         fileName = filesNames{i};
 
         % Extraction des paramètres X, Y et Z
-        [X, Y, Z] = extractFileParams(fileName);
+        [X, Y, Z] = extractFileParamsBis(fileName);
 
         % Vérification si Y est dans la plage spécifiée
         if isempty(Y) || ~ismember(Y, Y_range)
@@ -56,7 +56,7 @@ function [pairs, commonX, diffY, commonZ, NbPaires] = pairFilesFromFolder(direct
         % Recherche de fichiers compatibles pour former une paire
         for j = i+1:length(filesNames)
             compareFileName = filesNames{j};
-            [compareX, compareY, compareZ] = extractFileParams(compareFileName);
+            [compareX, compareY, compareZ] = extractFileParamsBis(compareFileName);
 
             % Vérification des critères pour former une paire
             if strcmp(X, compareX) && ...

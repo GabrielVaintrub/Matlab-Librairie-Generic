@@ -1,4 +1,4 @@
-function [X, Y, Z] = extractFileParams(fileName)
+function [X, Y, Z] = extractFileParamsBis(fileName)
     % extractFileParams : Extrait les paramètres X, Y et Z d'un nom de fichier.
     %
     % Syntaxe :
@@ -18,7 +18,7 @@ function [X, Y, Z] = extractFileParams(fileName)
     X = regexp(fileName, exprX, 'match', 'once');
 
     % Extraction de Y (valeur entre "_L" et "um_")
-    exprY = '(?<=_)\d+(?=um)'; % Expression régulière pour Y
+    exprY = '(?<=_L)\d+(?=um)'; % Expression régulière pour Y
     Y = str2double(regexp(fileName, exprY, 'match', 'once'));
 
     % Extraction de Z (valeur entre "_P" et "um")
