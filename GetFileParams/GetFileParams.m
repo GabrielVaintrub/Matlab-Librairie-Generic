@@ -11,7 +11,8 @@ function [FileParams] = GetFileParams(FileName, SetUpFile, Delimiter)
     % FileParams = repmat(FileParam, NbFiles, NbParamsSetUp); % Tableau d'objets de résultat
     
     for i = 1 : NbFiles
-        Splited = split(FileName(i), Delimiter);
+        temp  = split(FileName(i), '.');
+        Splited = split(temp(1), Delimiter);
         NbParamsFile = length(Splited);
         NbParams = max(NbParamsSetUp, NbParamsFile);
         for j = 1 : NbParamsSetUp
@@ -23,7 +24,7 @@ function [FileParams] = GetFileParams(FileName, SetUpFile, Delimiter)
                 FileParams(i, j).Value = erase(Splited{j}, SetUpFile(j).Sufix);
             end
         end
-        for j = NbParamsSetUp : NbParams
+        for j = NbParamsSetUp+1 : NbParams
             if j <= NbParamsFile
                 FileParams(i, j).Name = strcat('Param' , string(j));
                 FileParams(i, j).Value = Splited{j};
