@@ -30,5 +30,6 @@ function [FileParams] = GetFileParams(FileName, SetUpFile, Delimiter)
                 FileParams(i, j).Value = Splited{j};
             end
         end
+        
     end
 end
