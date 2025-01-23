@@ -12,7 +12,16 @@ function [FileParams] = GetFileParams(FileName, SetUpFile, Delimiter)
     
     for i = 1 : NbFiles
         temp  = split(FileName(i), '.');
-        Splited = split(temp(1), Delimiter);
+        if length(temp) > 2
+            Splited = "";
+            for j = 1: length(temp)-2
+                Splited = strcat(Splited, temp(j), ".");
+            end
+            Splited = strcat(Splited, temp(length(temp)-1))
+            Splited = split(Splited, Delimiter);
+        else
+            Splited = split(temp(1), Delimiter);
+        end
         NbParamsFile = length(Splited);
         NbParams = max(NbParamsSetUp, NbParamsFile);
         for j = 1 : NbParamsSetUp
