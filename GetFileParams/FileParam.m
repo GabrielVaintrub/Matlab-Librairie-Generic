@@ -4,6 +4,7 @@ classdef FileParam
         Value = '';
         Prefix = '';
         Sufix = '';
+        % unit = '';
     end
 end
 
